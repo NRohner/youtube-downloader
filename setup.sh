@@ -135,6 +135,11 @@ print_status "Installing npm dependencies..."
 npm install --silent
 print_success "npm dependencies installed"
 
+# Initialize shadcn/ui
+print_status "Initializing shadcn/ui..."
+npx --yes shadcn@latest init -d -y
+print_success "shadcn/ui initialized"
+
 echo ""
 echo -e "${GREEN}╔════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║                    Setup Complete!                         ║${NC}"
