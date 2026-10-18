@@ -57,17 +57,18 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
     window.open(downloadUrl, '_blank');
   };
 
-  // Saves every finished file to the user's computer, one after another.
-  // ponytail: staggered anchor clicks (browsers drop simultaneous downloads and block window.open loops); zip endpoint if per-file prompts get annoying
+  // Saves every finished file to the user's computer.
+  // One hidden iframe per file: browsers cap connections per host (~6), and with link clicks each
+  // queued navigation gets cancelled by the next click, silently dropping files. Frames are never
+  // removed, since removing one can cancel a still-queued download; a page reload clears them.
+  // ponytail: zip endpoint if per-file prompts get annoying
   const downloadAll = async () => {
     setSavingAll(true);
     for (const task of tasks.filter(t => t.status === 'complete')) {
-      const a = document.createElement('a');
-      a.href = youtubeApi.downloadFile(task.taskId);
-      a.download = '';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      const frame = document.createElement('iframe');
+      frame.style.display = 'none';
+      frame.src = youtubeApi.downloadFile(task.taskId);
+      document.body.appendChild(frame);
       await new Promise(resolve => setTimeout(resolve, 700));
     }
     setSavingAll(false);
