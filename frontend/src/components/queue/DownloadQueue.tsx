@@ -19,6 +19,7 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
   onRefresh,
 }) => {
   const [paused, setPaused] = useState(false);
+  const [savingAll, setSavingAll] = useState(false);
 
   useEffect(() => {
     youtubeApi.getQueueState().then((s) => setPaused(s.paused)).catch(() => {});
@@ -54,6 +55,22 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
   const handleDownload = (taskId: string) => {
     const downloadUrl = youtubeApi.downloadFile(taskId);
     window.open(downloadUrl, '_blank');
+  };
+
+  // Saves every finished file to the user's computer, one after another.
+  // ponytail: staggered anchor clicks (browsers drop simultaneous downloads and block window.open loops); zip endpoint if per-file prompts get annoying
+  const downloadAll = async () => {
+    setSavingAll(true);
+    for (const task of tasks.filter(t => t.status === 'complete')) {
+      const a = document.createElement('a');
+      a.href = youtubeApi.downloadFile(task.taskId);
+      a.download = '';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      await new Promise(resolve => setTimeout(resolve, 700));
+    }
+    setSavingAll(false);
   };
 
   // Deletes the file and record on the server, then drops the row
@@ -121,6 +138,12 @@ export const DownloadQueue: React.FC<DownloadQueueProps> = ({
                 Cancel All
               </Button>
             </>
+          )}
+          {completedTasks.some(t => t.status === 'complete') && (
+            <Button size="sm" onClick={downloadAll} isLoading={savingAll}>
+              <Download className="h-4 w-4 mr-1" />
+              Download All ({completedTasks.filter(t => t.status === 'complete').length})
+            </Button>
           )}
           {completedTasks.length > 0 && (
             <Button
