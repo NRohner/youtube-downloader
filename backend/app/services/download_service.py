@@ -24,7 +24,7 @@ PRESET_FORMATS = {
 
 # "best", 4K and 1080p rank by resolution, fps, then bitrate. yt-dlp's default ranks codec above bitrate,
 # so it can pick a lower-bitrate AV1/VP9 stream over a higher-bitrate one at the same resolution
-PRESET_SORT = {q: ["res", "fps", "br"] for q in ("best", "2160p", "1080p")}
+PRESET_SORT = {q: ["lang", "res", "fps", "br"] for q in ("best", "2160p", "1080p")}
 
 
 class DownloadService:

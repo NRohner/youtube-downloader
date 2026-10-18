@@ -45,7 +45,7 @@ def test_format_string_for_presets_and_explicit_ids():
 def test_best_preset_sorts_by_resolution_then_bitrate_not_codec():
     svc = DownloadService()
     for fid in ("preset:best", "preset:2160p", "preset:1080p"):
-        assert svc._get_format_sort(fid) == ["res", "fps", "br"]
+        assert svc._get_format_sort(fid) == ["lang", "res", "fps", "br"]
     # lower presets and explicit ids keep yt-dlp's default sort
     for fid in ("preset:720p", "preset:480p", "preset:audio", "137"):
         assert svc._get_format_sort(fid) is None
