@@ -5,6 +5,7 @@ from urllib.parse import urlparse, parse_qs
 from app.schemas.video import VideoInfo, VideoFormat, AudioFormat, PlaylistInfo
 from app.core.exceptions import VideoNotFoundError, InvalidURLError
 from app.core.rate_limit import youtube_limiter
+from app.core.ytdlp import ytdlp_network_opts
 import asyncio
 
 _ID = re.compile(r'^[\w-]{11}$')
@@ -43,7 +44,7 @@ class YouTubeService:
             'socket_timeout': 20,
             'retries': 3,
             'ignoreerrors': False,
-            'source_address': '::',  # IPv6 only: the IPv4 address is rate-limited by YouTube
+            **ytdlp_network_opts(),
             'noplaylist': True,  # watch?v=X&list=Y means video X; playlists go through get_playlist_info
         }
 

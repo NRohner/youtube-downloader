@@ -11,7 +11,7 @@ from app.services.youtube_service import YouTubeService
 from app.services.download_service import DownloadService
 from app.services.queue_service import QueueService
 from app.api.dependencies import get_youtube_service, get_download_service, get_queue_service
-from app.core.exceptions import create_http_exception, YouTubeDownloaderException, TaskNotFoundError, DownloadCancelled
+from app.core.exceptions import create_http_exception, YouTubeDownloaderException, TaskNotFoundError, DownloadCancelled, is_bot_check
 
 
 router = APIRouter(prefix="/api/v1", tags=["download"])
@@ -135,6 +135,10 @@ async def process_download_task(
             status="failed",
             error=str(e)
         ))
+        if is_bot_check(str(e)):
+            # YouTube flagged this IP: pause so the rest of the queue doesn't fail the same way
+            # and keep the flag alive. The user resumes once the block lifts.
+            queue_service.set_paused(True)
     finally:
         queue_service.cancelled.discard(task_id)
 

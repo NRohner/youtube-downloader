@@ -20,11 +20,24 @@ services:
       - downloads:/app/downloads
     depends_on:
       - redis
+      - bgutil
     environment:
       - REDIS_URL=redis://redis:6379/0
       - DOWNLOAD_DIR=/app/downloads
       - MAX_CONCURRENT_DOWNLOADS=3
       - DEBUG=false
+      # Seconds between YouTube requests; higher is slower but less likely to trip the bot check
+      - YOUTUBE_MIN_INTERVAL=10
+      - POT_PROVIDER_URL=http://bgutil:4416
+
+  # PO token server for yt-dlp (keep this tag in step with bgutil-ytdlp-pot-provider in requirements.txt).
+  # No published ports: it is unauthenticated, so only services on this compose network may reach it.
+  bgutil:
+    image: brainicism/bgutil-ytdlp-pot-provider:2.0.2
+    # Listen on IPv6: the backend forces yt-dlp onto IPv6, and that includes its calls to this server
+    command: ["--host", "::"]
+    init: true
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine

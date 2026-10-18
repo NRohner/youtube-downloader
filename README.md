@@ -49,7 +49,15 @@ Re-run `docker compose up -d --build` after changing code.
 
 #### IPv6 requirement
 
-YouTube rate-limits many IPv4 addresses (`HTTP 429`, "Sign in to confirm you're not a bot"). The backend therefore talks to YouTube over **IPv6 only** (`source_address: '::'` in yt-dlp, and `enable_ipv6: true` on the Compose network). Your network needs working IPv6; check with `curl -6 https://api6.ipify.org`. If you have no IPv6, remove the two `source_address` lines in `backend/app/services/youtube_service.py` and `download_service.py`.
+YouTube rate-limits many IPv4 addresses (`HTTP 429`, "Sign in to confirm you're not a bot"). The backend therefore talks to YouTube over **IPv6 only** (`source_address: '::'` in yt-dlp, and `enable_ipv6: true` on the Compose network). Your network needs working IPv6; check with `curl -6 https://api6.ipify.org`. If you have no IPv6, remove the `source_address` line in `backend/app/core/ytdlp.py`.
+
+#### If YouTube shows "Sign in to confirm you're not a bot"
+
+This means YouTube has flagged your IP address; no login is needed or stored. The app takes three precautions:
+
+- **Auto-pause:** when a download fails with that error, the queue pauses so the remaining videos don't fail the same way and keep the flag alive. Click Resume Queue once the block lifts (usually hours, or switch network).
+- **Slower pace:** Compose sets `YOUTUBE_MIN_INTERVAL=10` (seconds between YouTube requests). Raise it if blocks continue.
+- **PO token server:** the `bgutil` Compose service plus the `bgutil-ytdlp-pot-provider` plugin supply proof-of-origin tokens. It listens on IPv6 because the backend's yt-dlp calls (including those to it) are IPv6-only, and it publishes no ports. Keep the image tag in `docker-compose.yml` and the version in `requirements.txt` in step. This helps with some blocks but cannot override a flagged IP.
 
 ### Option 2: Development Setup
 
@@ -149,6 +157,8 @@ DOWNLOAD_DIR=./downloads
 MAX_CONCURRENT_DOWNLOADS=3
 MAX_FILE_AGE_HOURS=12
 YOUTUBE_MIN_INTERVAL=3
+# Optional PO token server for yt-dlp (the Compose file runs one at http://bgutil:4416)
+# POT_PROVIDER_URL=http://localhost:4416
 DEBUG=false
 
 # Frontend

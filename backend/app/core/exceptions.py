@@ -1,3 +1,4 @@
+import re
 from fastapi import HTTPException
 
 
@@ -29,6 +30,11 @@ class InvalidURLError(YouTubeDownloaderException):
 class TaskNotFoundError(YouTubeDownloaderException):
     """Raised when download task is not found"""
     pass
+
+
+def is_bot_check(message: str) -> bool:
+    """True if YouTube blocked the request with its "Sign in to confirm you're not a bot" wall"""
+    return bool(re.search(r"confirm you.re not a bot", message, re.IGNORECASE))  # curly or straight apostrophe
 
 
 def create_http_exception(exc: YouTubeDownloaderException) -> HTTPException:

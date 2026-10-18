@@ -8,6 +8,7 @@ from datetime import datetime
 from app.core.config import settings
 from app.core.exceptions import DownloadError
 from app.core.rate_limit import youtube_limiter
+from app.core.ytdlp import ytdlp_network_opts
 from app.schemas.download import DownloadTask
 import uuid
 
@@ -130,7 +131,7 @@ class DownloadService:
             'format': self._get_format_string(format_id, download_type),
             **({'format_sort': sort} if (sort := self._get_format_sort(format_id)) else {}),
             'outtmpl': output_path,
-            'source_address': '::',  # IPv6 only: the IPv4 address is rate-limited by YouTube
+            **ytdlp_network_opts(),
             'progress_hooks': [progress_hook],
 
             # Optimization for long videos

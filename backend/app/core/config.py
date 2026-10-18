@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     # Minimum seconds between YouTube requests (avoids bot detection / 429s)
     youtube_min_interval: float = 3.0
 
+    # URL of the bgutil PO token server (e.g. http://bgutil:4416); unset means no token provider
+    pot_provider_url: Optional[str] = None
+
     # Redis Settings
     redis_url: str = "redis://localhost:6379/0"
 
