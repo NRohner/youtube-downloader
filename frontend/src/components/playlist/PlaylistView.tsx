@@ -12,7 +12,7 @@ interface PlaylistViewProps {
 }
 
 const QUALITIES: { value: PlaylistQuality; label: string }[] = [
-  { value: 'best', label: 'Best (up to 1080p)' },
+  { value: 'best', label: 'Best available' },
   { value: '720p', label: '720p' },
   { value: '480p', label: '480p' },
   { value: 'audio', label: 'Audio only (MP3)' },

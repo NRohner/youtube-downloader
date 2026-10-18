@@ -34,10 +34,18 @@ def test_format_string_for_presets_and_explicit_ids():
     svc = DownloadService()
     assert svc._get_format_string("137", "video") == "137+bestaudio/best"
     assert svc._get_format_string("140", "audio") == "140/bestaudio/best"
-    assert svc._get_format_string("preset:best", "video") == "bv*[height<=1080]+ba/b[height<=1080]/b"
+    assert svc._get_format_string("preset:best", "video") == "bv*+ba/b"
     assert svc._get_format_string("preset:720p", "video") == "bv*[height<=720]+ba/b[height<=720]/b"
     assert svc._get_format_string("preset:480p", "video") == "bv*[height<=480]+ba/b[height<=480]/b"
     assert svc._get_format_string("preset:audio", "audio") == "bestaudio/best"
+
+
+def test_best_preset_sorts_by_resolution_then_bitrate_not_codec():
+    svc = DownloadService()
+    assert svc._get_format_sort("preset:best") == ["res", "fps", "br"]
+    # other presets and explicit ids keep yt-dlp's default sort
+    for fid in ("preset:720p", "preset:480p", "preset:audio", "137"):
+        assert svc._get_format_sort(fid) is None
 
 
 def test_delete_partials_removes_leftovers_but_keeps_finished_files(tmp_path):

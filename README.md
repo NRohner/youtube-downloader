@@ -7,7 +7,7 @@ A full-stack web application for downloading YouTube videos and audio at origina
 - **High-quality downloads**: video up to the highest resolution available, listed best first and selected by default
 - **Audio extraction**: MP3 from any video
 - **Embedded subtitles**: uploaded English subtitles are embedded in MP4 downloads automatically when the video has them
-- **Playlists**: load a playlist, pick single videos, or "Download all" at a quality preset (best up to 1080p, 720p, 480p, or MP3)
+- **Playlists**: load a playlist, pick single videos, or "Download all" at a quality preset (best available resolution and bitrate, 720p, 480p, or MP3)
 - **Queue controls**: real-time progress, cancel (stops the download and removes partial files), Cancel All, and Pause/Resume Queue
 - **Cleanup**: removing a finished download deletes its file and record; old files are also removed automatically
 - **Request rate limiting**: every YouTube request is spaced out to avoid bot detection

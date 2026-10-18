@@ -14,11 +14,15 @@ import uuid
 
 # Quality presets for playlist downloads: format ids differ per video, so these are selectors
 PRESET_FORMATS = {
-    "best": "bv*[height<=1080]+ba/b[height<=1080]/b",
+    "best": "bv*+ba/b",
     "720p": "bv*[height<=720]+ba/b[height<=720]/b",
     "480p": "bv*[height<=480]+ba/b[height<=480]/b",
     "audio": "bestaudio/best",
 }
+
+# "best" ranks by resolution, fps, then bitrate. yt-dlp's default ranks codec above bitrate,
+# so it can pick a lower-bitrate AV1/VP9 stream over a higher-bitrate one at the same resolution
+PRESET_SORT = {"best": ["res", "fps", "br"]}
 
 
 class DownloadService:
@@ -122,6 +126,7 @@ class DownloadService:
         # Configure yt-dlp options
         ydl_opts = {
             'format': self._get_format_string(format_id, download_type),
+            **({'format_sort': sort} if (sort := self._get_format_sort(format_id)) else {}),
             'outtmpl': output_path,
             'source_address': '::',  # IPv6 only: the IPv4 address is rate-limited by YouTube
             'progress_hooks': [progress_hook],
@@ -191,6 +196,10 @@ class DownloadService:
             return f"{format_id}+bestaudio/best"
         else:
             return f"{format_id}/bestaudio/best"
+
+    def _get_format_sort(self, format_id: str) -> Optional[list[str]]:
+        """yt-dlp format_sort override for a preset, or None for the default ranking"""
+        return PRESET_SORT.get(format_id.removeprefix("preset:")) if format_id.startswith("preset:") else None
 
     def _sanitize_filename(self, filename: str) -> str:
         """Sanitize filename for safe filesystem operations"""
