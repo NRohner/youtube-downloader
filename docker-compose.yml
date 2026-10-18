@@ -29,6 +29,8 @@ services:
       # Seconds between YouTube requests; higher is slower but less likely to trip the bot check
       - YOUTUBE_MIN_INTERVAL=10
       - POT_PROVIDER_URL=http://bgutil:4416
+      # Startup default for the Force IPv6 toggle in the UI header
+      - FORCE_IPV6=${FORCE_IPV6:-true}
 
   # PO token server for yt-dlp (keep this tag in step with bgutil-ytdlp-pot-provider in requirements.txt).
   # No published ports: it is unauthenticated, so only services on this compose network may reach it.

@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 
 from app.core.config import settings
 from app.api.routes.download import router as download_router
+from app.api.routes.settings import router as settings_router
 
 
 @asynccontextmanager
@@ -50,6 +51,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(download_router)
+app.include_router(settings_router)
 
 
 @app.get("/")

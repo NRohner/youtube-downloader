@@ -35,8 +35,10 @@ def parse_youtube_url(url: str) -> Tuple[Optional[str], Optional[str]]:
 
 
 class YouTubeService:
-    def __init__(self):
-        self.ydl_opts_info = {
+    @property
+    def ydl_opts_info(self) -> dict:
+        # Built per access so runtime setting changes (force_ipv6) apply without a restart
+        return {
             'quiet': True,
             'no_warnings': True,
             'extract_flat': False,

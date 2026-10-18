@@ -49,7 +49,7 @@ Re-run `docker compose up -d --build` after changing code.
 
 #### IPv6 requirement
 
-YouTube rate-limits many IPv4 addresses (`HTTP 429`, "Sign in to confirm you're not a bot"). The backend therefore talks to YouTube over **IPv6 only** (`source_address: '::'` in yt-dlp, and `enable_ipv6: true` on the Compose network). Your network needs working IPv6; check with `curl -6 https://api6.ipify.org`. If you have no IPv6, remove the `source_address` line in `backend/app/core/ytdlp.py`.
+YouTube rate-limits many IPv4 addresses (`HTTP 429`, "Sign in to confirm you're not a bot"). The backend therefore talks to YouTube over **IPv6 only** (`source_address: '::'` in yt-dlp, and `enable_ipv6: true` on the Compose network). Your network needs working IPv6; check with `curl -6 https://api6.ipify.org`. If you have no IPv6, or you are on a VPN (most only tunnel IPv4, so every YouTube lookup fails), turn off the **Force IPv6** switch in the app header. It takes effect on the next request and resets to the `FORCE_IPV6` env default (`true`) when the backend restarts. VPN exit IPs are often flagged by YouTube, so you may still hit the bot check below.
 
 #### If YouTube shows "Sign in to confirm you're not a bot"
 

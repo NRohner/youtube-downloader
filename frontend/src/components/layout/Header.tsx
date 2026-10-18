@@ -1,5 +1,6 @@
 import React from 'react';
 import { Download } from 'lucide-react';
+import { Ipv6Toggle } from './Ipv6Toggle';
 
 export const Header: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ export const Header: React.FC = () => {
             </h1>
           </div>
           <div className="flex items-center space-x-4">
+            <Ipv6Toggle />
             <span className="text-sm text-gray-500">
               Download videos and audio from YouTube
             </span>

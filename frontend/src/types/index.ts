@@ -75,3 +75,6 @@ export interface QueueStats {
   active: number;
   totalTasks: number;
 }
+export interface AppSettings {
+  forceIpv6: boolean;
+}

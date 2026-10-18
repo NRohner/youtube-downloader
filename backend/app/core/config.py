@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     # Minimum seconds between YouTube requests (avoids bot detection / 429s)
     youtube_min_interval: float = 3.0
 
+    # Talk to YouTube over IPv6 only (IPv4 is often rate-limited); turn off on a VPN without IPv6.
+    # Changed at runtime via PUT /api/v1/settings; this is the startup default.
+    force_ipv6: bool = True
+
     # URL of the bgutil PO token server (e.g. http://bgutil:4416); unset means no token provider
     pot_provider_url: Optional[str] = None
 

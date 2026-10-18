@@ -6,7 +6,8 @@ import {
   DownloadTask,
   PlaylistDownloadRequest,
   BatchDownloadResponse,
-  QueueStats
+  QueueStats,
+  AppSettings
 } from '../types';
 
 const api = axios.create({
@@ -89,6 +90,16 @@ export const youtubeApi = {
 
   getQueueStats: async (): Promise<QueueStats> => {
     const response = await api.get('/queue/stats');
+    return response.data;
+  },
+
+  getSettings: async (): Promise<AppSettings> => {
+    const response = await api.get('/settings');
+    return response.data;
+  },
+
+  updateSettings: async (settings: AppSettings): Promise<AppSettings> => {
+    const response = await api.put('/settings', settings);
     return response.data;
   },
 };
