@@ -11,8 +11,11 @@ interface PlaylistViewProps {
   disabled?: boolean;
 }
 
+// Videos lacking the chosen resolution fall back to their best available
 const QUALITIES: { value: PlaylistQuality; label: string }[] = [
   { value: 'best', label: 'Best available' },
+  { value: '2160p', label: '4K (2160p)' },
+  { value: '1080p', label: '1080p' },
   { value: '720p', label: '720p' },
   { value: '480p', label: '480p' },
   { value: 'audio', label: 'Audio only (MP3)' },

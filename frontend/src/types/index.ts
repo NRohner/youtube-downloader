@@ -57,7 +57,7 @@ export interface DownloadRequest {
   outputFilename?: string;
 }
 
-export type PlaylistQuality = 'best' | '720p' | '480p' | 'audio';
+export type PlaylistQuality = 'best' | '2160p' | '1080p' | '720p' | '480p' | 'audio';
 
 export interface PlaylistDownloadRequest {
   playlistUrl: string;

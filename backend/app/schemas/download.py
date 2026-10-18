@@ -37,7 +37,7 @@ class DownloadTaskUpdate(CamelModel):
 
 class PlaylistDownloadRequest(CamelModel):
     playlist_url: HttpUrl
-    quality: Literal["best", "720p", "480p", "audio"]
+    quality: Literal["best", "2160p", "1080p", "720p", "480p", "audio"]
 
 
 class BatchDownloadResponse(CamelModel):

@@ -15,14 +15,16 @@ import uuid
 # Quality presets for playlist downloads: format ids differ per video, so these are selectors
 PRESET_FORMATS = {
     "best": "bv*+ba/b",
+    "2160p": "bv*[height<=2160]+ba/b[height<=2160]/b",  # videos without 4K fall back to their best
+    "1080p": "bv*[height<=1080]+ba/b[height<=1080]/b",
     "720p": "bv*[height<=720]+ba/b[height<=720]/b",
     "480p": "bv*[height<=480]+ba/b[height<=480]/b",
     "audio": "bestaudio/best",
 }
 
-# "best" ranks by resolution, fps, then bitrate. yt-dlp's default ranks codec above bitrate,
+# "best", 4K and 1080p rank by resolution, fps, then bitrate. yt-dlp's default ranks codec above bitrate,
 # so it can pick a lower-bitrate AV1/VP9 stream over a higher-bitrate one at the same resolution
-PRESET_SORT = {"best": ["res", "fps", "br"]}
+PRESET_SORT = {q: ["res", "fps", "br"] for q in ("best", "2160p", "1080p")}
 
 
 class DownloadService:
